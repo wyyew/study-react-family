@@ -146,3 +146,33 @@ render() {
 }
 }
 ```
+
+## 概念三：Props & State & context React的数据载体
+
+> state 其实应该被称为内部状态或局布状态。“内部”表示它很少“跑”出组件，“状态”则意味着它经常变化。prop与context则用于在组件间传递数据， props只支持逐层传递， 而context 则能够跨级传递。
+
+### state
+
+React 组件可以在构造函数中初始化内部状态，可以通过this.setState()方法更新内部状态，还可以使用this.state获取内部状态。这些内部状态的操作与React的事件系统 配合就可以实现一些用户交互的功能。
+
+```
+export default class Counter extends Component {
+ constructor() {
+  super();
+  this.state = { value: 0};
+ }
+ 
+  render()
+  {
+   return (
+    <div>
+     <button onClick={() => this.setSate({value: this.state.value + 4 })}>
+      增加
+     </button>
+    </div>
+    Counter组件的内部状态:
+    <pre>{JSON.stringify(this.state, null, 2)}</pre>
+   )
+  }
+ }
+```
