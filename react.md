@@ -214,6 +214,8 @@ const Title = ({ title }) => (<h1>{title}</h1>)
 
 3. 组合使用state与props
 
+> 为了演示如何通过props向里而的组件传递数据，我们编写了三个组件，分别是是Button、 Message 和 MessageList 。在最外层消息列表中定义一个color变量，然后通过props将color会给最里面的按钮组件。
+
 ```
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
@@ -247,4 +249,57 @@ export default class Counter extends Component {
 ## context
 
 > context 在React中是个比较不常用的概念。 但是因为后面react-redux会用到context，所以我们把它拿出来和props对比说一说。
+
+```
+import React from 'react'
+import PropTypes from 'prop-types'
+
+function Button(props){
+  return (
+    <button style={{backgroundColor: props.color}}>
+      {props.children}
+    </button>
+  );
+}
+
+Button.propTypes = {
+  color:PropTypes.string.isRequired,
+  children:PropTypes.string.isRequired
+}
+
+function Message(props) {
+  return (
+    <li>
+      {props.text} <Button color={props.color}>Delete</Button>
+    </li>
+  );
+}
+
+Message.propType= {
+  text: PropTypes.string.isRequired,
+  color:PropTypes.string.isRequired
+};
+
+function MessageList() {
+  const color = 'gray';
+  const messages = [
+    {text: 'Hello React'},
+    {text: 'Hello Redux'}
+  ];
+  const children = messages.map((message, id) =>
+    <Message key={id} text={message.text} color={color}/>
+  );
+  return (
+    <div>
+      <p>通过props将color逐层传递给里面的Button组件</p>
+      <ul>
+        {children}
+      </ul>
+    </div>
+  );
+}
+
+export default MessageList
+```
+
 
