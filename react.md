@@ -302,4 +302,74 @@ function MessageList() {
 export default MessageList
 ```
 
+消息组件并没有使用color，但是为了给按钮组件传递color，不得不从消息列表中接受color。这个例子只有三层组件，假如你的程序中有更深层次的组件结构，你一定不愿意逐层传递props.此时， context将帮助你解决这个问题。
 
+### 使用 context 传递数据
+
+与使用props相比， context 只需要两步即可实现跨级传递。每一步，将要传递的数据放在消息列表组件的context中。第二步，在按钮组件中声明contextTypes,就可以通过组件实例的context属性访问接收到的数据了。事实上，只要在一个组件中定义了context，这个组件里面的子组件，不管卡跨多少级，都可以访问到context中的数据。
+
+```
+import React from 'react'
+import PropTypes from 'prop-types'
+
+function Button(props, context){
+  return (
+    <button style={{backgroundColor: context.color}}>
+      {props.children}
+    </button>
+  );
+}
+
+Button.propTypes = {
+  children:PropTypes.string.isRequired
+}
+
+Button.contextTypes = {
+  color: PropTypes.string.isRequired
+}
+
+function Message(props) {
+  return (
+    <li>
+      {props.text} <Button>Delete</Button>
+    </li>
+  );
+}
+
+Message.propType= {
+  text: PropTypes.string.isRequired
+};
+
+class ContextMessageList extends React.Component {
+  getChildContext() {
+    return {color: '#108ee9'};
+  }
+  render() {
+  const messages = [
+    {text: 'Hello React'},
+    {text: 'Hello Redux'}
+  ];
+  const children = messages.map((message, id) =>
+    <Message key={id} text={message.text} />
+  );
+  return (
+    <div>
+      <p>通过context将color逐层传递给里面的Button组件</p>
+      <ul>
+        {children}
+      </ul>
+    </div>
+  );
+  }
+}
+ContextMessageList.childContextTypes = {
+  color:PropTypes.string.isRequired
+}
+export default ContextMessageList
+```
+
+> 注意：
+
+1. 如果不声明childContextTypes，将无法在组件中使用getChildContext()方法
+
+2. 如果 没有定义contextTypes, context将会是个空对象
