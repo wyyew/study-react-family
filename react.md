@@ -246,6 +246,9 @@ export default class Counter extends Component {
 
 ```
 
+一般React应用当中的绝大多数数据都是prop，只有当用户输入内容时才会使用state来处理。
+
+
 ## context
 
 > context 在React中是个比较不常用的概念。 但是因为后面react-redux会用到context，所以我们把它拿出来和props对比说一说。
@@ -373,3 +376,84 @@ export default ContextMessageList
 1. 如果不声明childContextTypes，将无法在组件中使用getChildContext()方法
 
 2. 如果 没有定义contextTypes, context将会是个空对象
+
+3. 无状态组件可以直接在函数参数中获取context,需有状态组件可以通过this.context和生命周期函数获取context.
+
+## props 与 context的适用场景
+
+react 的context 和全局变量非常相似，在大多数场景下， 我们都应该尽量避免使用。 适合使用context的场景包括传递登录信息、当前语言以及主题信息。另外 react-redux的 Provider组件 就是使用了conext来传递store的。
+
+如果只是传递一些功能模块的数据，则尽量不要使用context, 使用props传递会更加和容易理解，而使用context则会使你的组件的复用性降低，因为这些组件依赖“上下文”，当你在别的地方渲染它们的时候，可能会出现一些差异。
+
+
+## 概念四：组件API
+
+在之前的内容当中我们已经提及了render和setState两个方法，他们都包含在组件API方法之中。还有一个比较有用的方法constructor，我们一般会在其中初始化state并做一些方法的绑定。
+
+我们并不会在这里展开篇幅讲解React的API 用到的时候可以去查。
+
+[top-level-api](http://reactjs.cn/react/docs/top-level-api.html)
+
+[component-api](http://reactjs.cn/react/docs/component-api.html)
+
+[Component Specs and Lifecycle](http://reactjs.cn/react/docs/component-specs.html)
+
+### 组件的生命周期
+
+组件的生命周期可分成三个状态：
+
+Mounting：已插入真实 DOM
+
+Updating：正在被重新渲染
+
+Unmounting：已移出真实 DOM
+
+生命周期的方法有：
+
+Mounting: componentWillMount  在渲染前调用。
+
+Mounting: componentDidMount 在第一次渲染后调用。
+
+Updating: componentWillReceiveProps 在组件接收到一个新的prop时被调用。这个方法在第一次渲染时不会被调用。
+
+Updating: shouldComponentUpdate  返回一个布尔值。 在组件接收到新的props或者state时被调用。在初始化时或者使用forceUpdate时不被调用。可以在你确认不需要更新组件时使用。
+
+Updating: componentWillUpdate 在组件接收到新的props或者state但还没有render时被调用。在初始化时不会被调用。
+
+Updating: componentDidUpdate  在组件完成更新后立即调用。在初始化是不被调用
+
+Unmounting: componentWillUnmount  在组件从DOM中移除的时候立刻被调用。
+
+### React 组件中的this
+
+点击下面组件中的h1。
+
+```
+import React from 'react';
+
+const suffix = '被调用，this指向：';
+export default class TestThis extends React.Component {
+  handler() {
+    console.log(`handler${suffix}`, this);
+  }
+  render() {
+    console.log(`render${suffix}`, this);
+    return (
+      <div>
+        <h1 onClick={this.handler}>测试this指向</h1>
+      </div>
+    );
+  }
+}
+
+```
+
+结果是render()函数中的this指向了组件实例，需handler()函数中的this则是一个null。那React组件中的this到底是什么呢？
+
+js函数中的this不是在函数定义的时候定义的而是在函数运行时定义的，React组件也遵循了这种特性，所以组件方法的“调用者”不同会导致this不同。注这里的“调用者”指函数执行时候的当前对象。
+
+让我们分别在组件自带的生命周期函数以及自定义的handler()方法中打印this,并在render()方法里分别使用this.handler()、window.handler()、onClick={this.handler}这三种方法调用handler(),看看this会有什么不同。
+
+
+
+## 概念五：组件类型
