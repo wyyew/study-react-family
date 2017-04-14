@@ -184,3 +184,28 @@ export default class Counter extends Component {
 
 我们可以使用props向组件传递数据， React 组件从props中拿到数据。然后返回视图。
 
+1. 使用props
+
+向一个组件传递props的方法是将数据写在组件标签的属性中。
+
+```
+<Content value={this.state.value} />
+```
+
+获取props:
+
+>> 在无状态函数中编写的组件中获取props，只需要将prps作为参数传入组件即可。
+
+```
+function Content(props) {
+return <p>Content组件的props.value: {props.value} </p>;
+}
+
+const Title = ({ title }) => (<h1>{title}</h1>)
+```
+
+在使用类编写的组件中，需要通过this.props获取props。 this是组件实例。
+
+2. 验证props
+
+在一个健壮的程序中，任何输入都是需要验证的，组件也不例外。Props作为组件的输入，必须进行验证。验证props需要使用 * prop-typesr的PropTypes(React升级之后就不是React.propTypes了再用它会报错) * 。 它提供很多验证来验证传入的数据是否合法。当向props传入非法数据时，控制台会抛出警告。
