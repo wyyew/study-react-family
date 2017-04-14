@@ -209,3 +209,42 @@ const Title = ({ title }) => (<h1>{title}</h1>)
 2. 验证props
 
 在一个健壮的程序中，任何输入都是需要验证的，组件也不例外。Props作为组件的输入，必须进行验证。验证props需要使用 * prop-typesr的PropTypes(React升级之后就不是React.propTypes了再用它会报错) * 。 它提供很多验证来验证传入的数据是否合法。当向props传入非法数据时，控制台会抛出警告。
+
+> 请看propValidation页面
+
+3. 组合使用state与props
+
+```
+import React, { Component } from 'react';
+import PropTypes from 'prop-types'
+
+function Content(props) {
+  return <p>Content组件的props.value：{props.value} </p>;
+}
+
+Content.propTypes = {
+  value: PropTypes.number.isRequired
+};
+
+export default class Counter extends Component {
+  constructor(props){
+    super(props);
+    this.state = { value: 0 };
+  }
+  render() {
+    return (
+      <div>
+        <button onClick={() => this.setState({ value: this.state.value + 1})}>增加</button>
+        <pre>{this.state.value}</pre>
+        <Content value={this.state.value}></Content>
+      </div>
+    )
+  }
+}
+
+```
+
+## context
+
+> context 在React中是个比较不常用的概念。 但是因为后面react-redux会用到context，所以我们把它拿出来和props对比说一说。
+
