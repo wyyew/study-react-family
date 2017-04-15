@@ -507,5 +507,74 @@ constructor(props){
 super(props);
 this.handler = this.handler.bind(this)
 ```
-
 ## 概念五：组件类型
+
+我们在React当中一般按照如下的方法定义一个组件
+
+```
+class MyComponnet extends Component {
+render() {
+return <p>Hello world</p>
+}
+}
+```
+
+在Class中我们还可以申明一个组件的许多其他方法，而在更多的情况下我们可以写一种函数式组件。
+类似于自定义一个模板标签一样，函数式组件接收一个props参数并返回特定的HTML内容，不过你当然仍可以在其中调用一些JS代码：
+
+```
+const MyComponent = props => {
+return <p>hello {props.name}! Today is {new Date()}</p>
+}
+```
+因为通常你的组件可能并不需要多么复杂的交互，也不需要多余的其他方法，用函数式写法可以让你的代码更加简洁。
+
+当然在这样的组件当中你也没有办法使用setState方法，也即是说函数式组件没有state，所以也可以被称作是无状态组件。
+
+不同的组件类型也就延伸出了组件角色的概念，人们在实践过程中开始将组件分为两种角色，一种关注UI逻辑，用来展示或隐藏内容；另一种关注数据交互，例如加载服务器端的数据。
+
+这两种组件被称作容器组件和展示组件。分别用来处理不同的业务逻辑：
+
+```
+//展示组件
+class CommentList extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return (
+      <ul>
+        this.props.comments.map((body, author) => {
+        return <li>{body}------{author}</li>
+        })
+      </ul>
+    )
+  }
+}
+
+//容器组件
+
+class CommentListContainer extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state= {comments: []};
+  }
+  componentDidMount() {
+    $ajax({
+      url:'/mycomments.json',
+      dataType:'json',
+      success:function(comments) {
+        this.setState({comments:comments});
+      }.bind(this)
+    });
+  }
+  render() {
+    return (
+       <CommentList comments={this.state.comments} />
+    )
+  }
+}
+```
+
+到此React基础知识就介绍完了，当然,这些知识都只是React知识体系中的一部分。在日常开发过程中，如果遇到不能解决的问题，仍然 需要查阅[官方文档](https://facebook.github.io/react/docs/refs-and-the-dom.html)。
+
