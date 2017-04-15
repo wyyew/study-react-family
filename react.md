@@ -25,7 +25,7 @@
 
 这其实就是React能够帮你做到的。React组件能够像原生的HTML标签一样输出特定的界面元素，并且也能包括一些元素相关逻辑功能的代码。
 
-现在我们一般会用ES6的Class语法来声明一个React组件，它包含一个能够返回HTML的render方法。（当然也可以用函数声明，我们在之后会聊到）
+现在我们一般会用ES6的Class语法来声明一个React组件，它包含一个能够返回HTML的render方法。（当然也可以用函数声明）
 
 ```
 class MyComponent extends React.Component {
@@ -36,7 +36,7 @@ class MyComponent extends React.Component {
   }
 }
 ```
-### 概念二：JSX是什么玩意儿？
+### 概念二：JSX是什么?
 
 是的你没看错，按照上面React组件的示例代码，React的意思就是让我们把HTML和JS代码全都写在一起。React是通过一种叫做JSX的语法扩展（X代表XML）来实现的。
 
@@ -454,6 +454,58 @@ js函数中的this不是在函数定义的时候定义的而是在函数运行�
 
 让我们分别在组件自带的生命周期函数以及自定义的handler()方法中打印this,并在render()方法里分别使用this.handler()、window.handler()、onClick={this.handler}这三种方法调用handler(),看看this会有什么不同。
 
+```
+import React from 'react';
 
+const suffix = '被调用，this指向：';
+
+export default class TestThis extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handler = this.handler.bind(this)
+  }
+  componentDidMount() {
+    console.log(`componentDidMount${suffix}`, this)
+  }
+  componentWillReceiveProps() {
+    console.log(`componentWillReceiveProps${suffix}`, this)
+  }
+  shoudComponentUpdate() {
+    console.log(`shoudComponentUpdate${suffix}`, this);
+    return true;
+  }
+  componentDidUpdate() {
+    console.log(`componentDidUpdate${suffix}`, this);
+  }
+  componentWillUnmount() {
+    console.log(`componentWillUnmount${suffix}`, this)
+  }
+  handler() {
+    console.log(`handle${suffix}`, this)
+  }
+
+  render() {
+    console.log( `render${suffix}`, this);
+    this.handler();
+    window.handler = this.handler;
+    window.handler();
+    return (
+      <div>
+        <h1 onClick={this.handler}>测试this指向</h1>
+        <p></p>
+      </div>
+    )
+  }
+}
+
+```
+
+React组件生命周期函数中的this指向组件实例。自定义组件方法的this会因“调用者”不同而不同。为了在组件的自定义方法中获取组件实例，需要手动绑定this到组件实例
+
+```
+constructor(props){
+super(props);
+this.handler = this.handler.bind(this)
+```
 
 ## 概念五：组件类型
