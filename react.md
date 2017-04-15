@@ -624,6 +624,10 @@ export default  class SignupForm extends Component {
   }
 
 ```
+## Mixin 
 
+Mixin 的本质就是一组方法，本身就是一组对象。
+
+Mixin 的目的就是横向抽离出组件的相似代码
 到此React基础知识就介绍完了，当然,这些知识都只是React知识体系中的一部分。在日常开发过程中，如果遇到不能解决的问题，仍然 需要查阅[官方文档](https://facebook.github.io/react/docs/refs-and-the-dom.html)。
 
