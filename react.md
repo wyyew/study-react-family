@@ -386,7 +386,7 @@ react 的context 和全局变量非常相似，在大多数场景下， 我们�
 如果只是传递一些功能模块的数据，则尽量不要使用context, 使用props传递会更加和容易理解，而使用context则会使你的组件的复用性降低，因为这些组件依赖“上下文”，当你在别的地方渲染它们的时候，可能会出现一些差异。
 
 
-## 概念四：组件API
+## 概念四：[组件API](https://facebook.github.io/react/docs/react-component.html)
 
 在之前的内容当中我们已经提及了render和setState两个方法，他们都包含在组件API方法之中。还有一个比较有用的方法constructor，我们一般会在其中初始化state并做一些方法的绑定。
 
@@ -624,10 +624,7 @@ export default  class SignupForm extends Component {
   }
 
 ```
-## Mixin 
+## 在ES6语法中不支持的一些方法例如 [react-without-es6](https://facebook.github.io/react/docs/react-without-es6.html) 
 
-Mixin 的本质就是一组方法，本身就是一组对象。
-
-Mixin 的目的就是横向抽离出组件的相似代码
 到此React基础知识就介绍完了，当然,这些知识都只是React知识体系中的一部分。在日常开发过程中，如果遇到不能解决的问题，仍然 需要查阅[官方文档](https://facebook.github.io/react/docs/refs-and-the-dom.html)。
 
