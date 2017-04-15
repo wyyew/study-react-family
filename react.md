@@ -575,6 +575,55 @@ class CommentListContainer extends React.Component {
   }
 }
 ```
+## 组件的嵌套
+
+使用React来构建web应用，每个页面都将是多个组件组成，并且相互嵌套来构成的, 组件的嵌套的本质就是父子关系，我们来看一下父子之间是怎么传递数据的。
+
+1. 父组件向子组件通信--前面我们学过了是用props来传递的，父组件把一些数据通过props传递给子组件，子组件对这些props进行一些操作，例如保存为状态或者进行一些渲染之类的。
+
+2. 子组件向父组件通信--父组件可以把一些事件处理函数通过props的方式传给子组件，子组件如果触发了事件就可以调用父组件的事件处理函数。这样间接的实现了子组件和父组件的通信。
+
+```
+import React, { Component } from 'react';
+
+class GenderSelect extends Component {
+  render() {
+    return (
+      <select onChange={this.props.handleChange}>
+          <option value="">请选择</option>
+          <option value="0">女</option>
+          <option value="1">男</option>
+      </select>
+    )
+  }
+}
+
+export default  class SignupForm extends Component {
+    constructor(props) {
+      super(props);
+      this.state = {name:'', password:'', gender:''};
+    }
+    handleChange = (name, event) => {
+      let newState = {};
+      newState[name] = event.target.value;
+      this.setState(newState);
+    }
+    handleSelect = (event) => {
+      this.setState({gender: event.target.value});
+    }
+    render() {
+      console.log(this.state);
+      return (
+          <form>
+            <input type="text" placeholder="请输入用户名" onChange={this.handleChange.bind(this, 'name')}/>
+            <input type="password" placeholder="请输入密码" onChange={this.handleChange.bind(this, 'password')}/>
+            <GenderSelect handleChange={this.handleSelect}></GenderSelect>
+          </form>
+      )
+    }
+  }
+
+```
 
 到此React基础知识就介绍完了，当然,这些知识都只是React知识体系中的一部分。在日常开发过程中，如果遇到不能解决的问题，仍然 需要查阅[官方文档](https://facebook.github.io/react/docs/refs-and-the-dom.html)。
 
