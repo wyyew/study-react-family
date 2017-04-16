@@ -95,3 +95,54 @@ store.subscribe(() => {
     console.log('pre state:', previousValue, 'next state:', currentValue);
 })
 ```
+
+### 发起Action 
+
+store 使用dispatch(action)方法发起action，更新state:
+
+```
+store.dispatch({type:'INCREMENT'});
+```
+
+当发起action 后，就将action传进了store中，使用reducer纯函数执行更新。改变内部state唯一方法是dispatch一个action.这样确保了视图和网络请求都不能直接修改state, 相反它们只能表达想要修改的意图，也就是dispatch一个action.
+
+通向罗马的路有千万条，可惜最后都集中到dispatch这一条路上面了。集中处理的好处很明显，如果你在这条路上放一个日志中间件，所有的变化都会被打印。而且不止打印日志这个功能，社区为我们提供了丰富的中间件，你可以选择需要的放在dispatch这条路上。
+
+```
+import { creatStore } from 'redux';
+
+function counter(state = 0, action) {
+    switch(action.type) {
+        case 'INCREMENT'：
+            return state + 1;
+         case 'DECREMENT'
+          return state - 1;
+         default:
+            return state;
+   }
+}
+
+const store = createStore(counter);
+
+let currentValue = store.getState();
+
+const listener = () => {
+    const previusValue = currentValue;
+    currentValue = store.getState();
+    console.log('pre state:', previousValue, 'next state:', currentValue);
+}
+
+
+ store.subscribe(listener);
+ 
+ store.dispatch({type: 'INCREMENT'});
+ store.dispatch({type: 'INCREMENT'});
+ store.dispatch({type: 'DECREMENT'});
+```
+### 总结
+
+- action 是个js对象，它是store数据的唯一来源。
+
+- reducer 是 纯函数， 不要在中做这些事情： 修改传入参数;执行有副作用的操作；调用非纯函数。
+
+- store负责更新、查询、订阅state等多个工作。store是全局唯一的，它将action、 reducer 、 state 等联系在一起。
