@@ -4,7 +4,32 @@
 
 - connect 方法
 
+- 展示组件和容器组件
+
 ### Provider
+
+provider 只是一个React组件，它的职能是通过context将store传递给子组件。因为Provider组件是通过context传递store的，所以里面的组件，不管卡跨多少级，都可以通过connect()方法获取store并进行连接。下面是它的原码：
+
+```
+export default class Provider extends Component {
+  getChildContext() {
+  return {store: this.store}
+  }
+  ...
+}
+...
+
+Provider.propTypes = {
+  store:storeShape.isRequired;
+  ...
+}
+Provider.childContextTypes = {
+  store:storeShape.isRequired
+}
+
+```
+
+可以看出Provider只是一个使用context传递数据的React组件而已。
 
 所有组件的顶层使用Provider组件给整个程序提供store.
 
@@ -159,3 +184,26 @@ class Counter extends Component {
 ```
 
 使用装饰器写法将connect()写在组件类声明上面。装饰器写法和前面的写法只是语法上的区别，其他并无二致。但是，如果使用装饰器写法，就不能使用无状态函数来编写组件了，因为装饰器需要加在类声明上。另外，还必须使用static propTypes= {...} 这种静态属性的写法来声明props类型。
+
+### connect原理
+
+connect 是一个嵌套函数。运行connect()后，会生成一个高阶组件。该高阶组件接受一个组件作为参数再次运行，会生成一个新组件。
+
+高阶组件新生成的组件叫connect组件。connect组件从context中获取了来自Provider的store，然后从store中获取state和dispatch，最后将state和经过dispatch加工的action创建函数连接到组件上，并在state变化时重新渲染组件。
+
+> 注意： 假如一个页面中有多个被connect()连接的组件， 这些组件只会在自己对应的state变化时重新渲染，不会相互干扰。因为react-redux在重新渲染组件前会检测传入组件的数据是否变化，如果没有变化，就不会执行渲染。如此一来，我们就不用担心页面中某一个组件数据的变化，会“连累”其他组件重新渲染了，只需要将不同的数据用不同的connect()隔离开即可。
+
+### 展示组件与容器组件
+
+如果你的页面中包含多个组件，是否应该将每个组件都连接到Redux中呢？当然不是。Redux通常只与靠近顶层的组件进行连接，这些组件再将state和action创建函数通过pros传给里面的组件。为了区分这两种组件，我们将与redux连接的组件称为容器组件（container）,将里面的组件称为展示组件（presentational component）.
+
+|           |  展示组件 | 容器组件  |
+| :-------- | --------:| :--: |
+| 功能  | 决定程序如何显示 |  决定程序如何非诚勿扰（数据获取、状态更新） |
+| 是否连接redux|  否 |  是  |
+| 读取数据|从props中读取数据| 订阅 redux的state |
+|更新数据|调用来自props的回调函数|发起redux的action|
+|生成组件|手动编写|大多通过react redux自动生成|
+
+虽然容器组件与展示组件的约定是react与redux开发中的最佳实践，但是这个约定并非需要死板的遵循。事实上， containers目录中也可以放置没有连接redux的组件，因为有些页面就是不需要连接redux的，但它仍然是其他组件的“容器”。而components目录中也可以放置连接redux的组件。但在绝大多多情况下，我们都应该将redux连接在组件顶层，不要让里面的组件感受到redux的存在。
+
