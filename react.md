@@ -208,7 +208,7 @@ const Title = ({ title }) => (<h1>{title}</h1>)
 
 2. 验证props
 
-在一个健壮的程序中，任何输入都是需要验证的，组件也不例外。Props作为组件的输入，必须进行验证。验证props需要使用 * prop-typesr的PropTypes(React升级之后就不是React.propTypes了再用它会报错) * 。 它提供很多验证来验证传入的数据是否合法。当向props传入非法数据时，控制台会抛出警告。
+在一个健壮的程序中，任何输入都是需要验证的，组件也不例外。Props作为组件的输入，必须进行验证。验证props需要使用 * prop-types的PropTypes(React升级之后就不是React.propTypes了再用它会报错) * 。 它提供很多验证来验证传入的数据是否合法。当向props传入非法数据时，控制台会抛出警告。
 
 > 请看propValidation页面
 
