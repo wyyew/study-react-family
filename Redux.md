@@ -235,7 +235,16 @@ export default combineReducers({
 
 参数
 
-(...functions): 需要合成的多个函数。预计每个函数都接收一个参数。它的返回值将作为一个参数提供给它左边的函数，以此类推。例外是最右边的参数可以接受多个参数，因为它将为由此产生的函数提供签名。（译者注：compose(funcA, funcB, funcC) 形象为 compose(funcA(funcB(funcC())))）
+(...functions): 需要合成的多个函数。预计每个函数都接收一个参数。它的返回值将作为一个参数提供给它左边的函数，以此类推。另外是最右边的参数可以接受多个参数，因为它将为由此产生的函数提供签名。（译者注：compose(funcA, funcB, funcC) 形象为 
+
+```
+compose(funcA(funcB(funcC())))）
+
+const absAndRound = compose(Math.round, Math.abs);
+==
+const absAndRound = val => Math.round(Math.abs(val))
+
+```
 
 返回值
 
