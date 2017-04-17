@@ -8,6 +8,8 @@
 
 - store
 
+- 常用api
+
 ### 概念一 Action
 
 > Action本质上是Js普通对象。我们约定，action 内使用一个字符串类型的type字段来表示将要执行的动作。多数情况下，type会被定义成字符串常量。
@@ -139,6 +141,101 @@ const listener = () => {
  store.dispatch({type: 'INCREMENT'});
  store.dispatch({type: 'DECREMENT'});
 ```
+
+### 常用api
+
+- createStore(reducer, [preloadedState], [enhancer])
+
+作用： 创建一个 Redux store 来以存放应用中所有的 state。应用中应有且仅有一个 store。
+
+参数：
+
+1. reducer (Function): 接收两个参数，分别是当前的 state 树和要处理的 action，返回新的 state 树。
+
+2. [preloadedState] (any): 初始时的 state。 在同构应用中，你可以决定是否把服务端传来的 state 混合（hydrate）后传给它，或者从之前保存的用户会话中恢复一个传给它。如果你使用 combineReducers 创建 reducer，它必须是一个普通对象，与传入的 keys 保持同样的结构。否则，你可以自由传入任何 reducer 可理解的内容。
+
+3. [enhancer] (Function): Store enhancer 是一个组合 store creator 的高阶函数，返回一个新的强化过的 store creator。这与 middleware 相似，多个middleware要用applyMiddleware()把它们组合起来。.
+
+返回值：(Store) ，保存了应用所有 state 的对象。改变 state 的惟一方法是 dispatch action。你也可以 subscribe 监听 state 的变化，然后更新 UI。
+
+- combineReducers(reducers)
+
+作用是，把一个由多个不同 reducer 函数作为 value 的 object，合并成一个最终的 reducer 函数，然后就可以对这个 reducer 调用 createStore。
+
+合并后的 reducer 可以调用各个子 reducer，并把它们的结果合并成一个 state 对象。state 对象的结构由传入的多个 reducer 的 key 决定。
+
+最终，state 对象的结构会是这样的：
+
+```
+{
+  reducer1: ...
+  reducer2: ...
+}
+```
+
+参数：
+
+reducers (Object): 一个对象，它的值（value） 对应不同的 reducer 函数，这些 reducer 函数后面会被合并成一个。
+
+返回值
+
+(Function)：一个调用 reducers 对象里所有 reducer 的 reducer，并且构造一个与 reducers 对象结构相同的 state 对象。
+
+```
+//createStore(combineReducers(...), initialState)
+
+
+import { combineReducers } from 'redux'
+import todos from './todos'
+import counter from './counter'
+
+export default combineReducers({
+  todos,
+  counter
+})
+```
+
+- applyMiddleware(...middlewares)
+
+作用：它可以把多个middleware 一次性的作为createStore的加强函数。
+
+参数
+
+...middlewares: 遵循 Redux middleware API 的函数。
+
+返回值
+
+(Function) 一个应用了 middleware 后的 store enhancer。这个 store enhancer 的签名是 createStore => createStore，但是最简单的使用方法就是直接作为最后一个 enhancer 参数传递给 createStore() 函数。
+
+- bindActionCreators(actionCreators, dispatch)
+
+作用：
+
+把 action creators 转成拥有同名 keys 的对象，但使用 dispatch 把每个 action creator 包围起来，这样可以直接调用它们。
+
+参数
+
+- actionCreators (Function or Object): 一个 action creator，或者键值是 action creators 的对象。
+
+- dispatch (Function): 一个 dispatch 函数，由 Store 实例提供。
+
+返回值
+
+(Function or Object): 一个与原对象类似的对象，只不过这个对象中的的每个函数值都可以直接 dispatch action。如果传入的是一个函数作为 actionCreators，返回的也是一个函数。
+
+- compose(...functions)
+
+作用：　从右到左来组合多个函数。　当需要把多个 store 增强器 依次执行的时候，需要用到它。
+
+参数
+
+(...functions): 需要合成的多个函数。预计每个函数都接收一个参数。它的返回值将作为一个参数提供给它左边的函数，以此类推。例外是最右边的参数可以接受多个参数，因为它将为由此产生的函数提供签名。（译者注：compose(funcA, funcB, funcC) 形象为 compose(funcA(funcB(funcC())))）
+
+返回值
+
+(Function): 从右到左把接收到的函数合成后的最终函数。
+
+
 ### 总结
 
 - action 是个js对象，它是store数据的唯一来源。
