@@ -4,15 +4,18 @@
 
 （2）所有的状态，保存在一个对象里面。
 
+Redux 把界面视为一种状态机，界面里的所有状态、数据都可以由一个状态树来描述。所以对于界面的任何变更都简化成了状态机的变化.
+
+
 ## 四大基本概念
 
-- Action
+- Action --- 所谓的 action，就是用一个对象描述发生了什么
 
-- reducer
+- reducer --- 这个 action 对象和当前的状态树 state 会被传入到 reducer 中，产生一个新的 state
 
 - 纯函数
 
-- store
+- store --- store 的作用就是储存 state，并且监听其变化。
 
 ## 常用api
 
