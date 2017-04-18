@@ -14,14 +14,13 @@
 
 你需要了解有关React的第一要点就是——组件。你编写的所有React代码基本上就是一个包含许多小组件在内的大组件。
 
-那么到底什么是组件呢？我们可以拿HTML标签 <select> 来举一个很恰当的例子。原生的下拉框标签不止包括边框、文本、下拉箭头，它还掌控着自身打开关闭的逻辑。
+那么到底什么是组件呢？我们可以拿HTML标签 select 来举一个很恰当的例子。原生的下拉框标签不止包括边框、文本、下拉箭头，它还掌控着自身打开关闭的逻辑。
 
+> 图片
 
- 图片
+现在来设想一下你需要构建一个你自定义样式和行为逻辑的select组件：
 
-现在来设想一下你需要构建一个你自定义样式和行为逻辑的<select>：
-
- 图片
+> 图片
 
 这其实就是React能够帮你做到的。React组件能够像原生的HTML标签一样输出特定的界面元素，并且也能包括一些元素相关逻辑功能的代码。
 
@@ -210,7 +209,7 @@ const Title = ({ title }) => (<h1>{title}</h1>)
 
 在一个健壮的程序中，任何输入都是需要验证的，组件也不例外。Props作为组件的输入，必须进行验证。验证props需要使用 * prop-types的PropTypes(React升级之后就不是React.propTypes了再用它会报错) * 。 它提供很多验证来验证传入的数据是否合法。当向props传入非法数据时，控制台会抛出警告。
 
-> 请看propValidation页面
+> 请看[propValidation](http://reactjs.cn/react/docs/reusable-components.html#prop-validation)页面
 
 3. 组合使用state与props
 
