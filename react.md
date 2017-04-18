@@ -385,7 +385,7 @@ export default ContextMessageList
 
 react 的context 和全局变量非常相似，在大多数场景下， 我们都应该尽量避免使用。 适合使用context的场景包括传递登录信息、当前语言以及主题信息。另外 react-redux的 Provider组件 就是使用了conext来传递store的。
 
-如果只是传递一些功能模块的数据，则尽量不要使用context, 使用props传递会更加和容易理解，而使用context则会使你的组件的复用性降低，因为这些组件依赖“上下文”，当你在别的地方渲染它们的时候，可能会出现一些差异。
+如果只是传递一些功能模块的数据，则尽量不要使用context, 使用props传递会更加清晰和容易理解，而使用context则会使你的组件的复用性降低，因为这些组件依赖“上下文”，当你在别的地方渲染它们的时候，可能会出现一些差异。
 
 
 ## 概念四：[组件API](https://facebook.github.io/react/docs/react-component.html)
