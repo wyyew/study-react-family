@@ -56,7 +56,7 @@ const Demo1 = () => {
   )
 }
 ```
-> 注意: 因为JSX终究还是JS,而class和for 又是js中的保留字，所以尽管JSX中的标签属性绝大多数都与HTML规范一致，但是class和for这两个属性在JSX中需要写为className和htmFor.
+> 注意: 因为JSX终究还是JS,而class和for 又是js中的保留字，所以尽管JSX中的标签属性绝大多数都与HTML规范一致，但是class和for这两个属性在JSX中需要写为className和htmlFor.
 
 2. JSX允许在闭合标签中使用js表达式，但要用{JS变量}大括号包裹起来：
 
