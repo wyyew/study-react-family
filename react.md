@@ -30,7 +30,10 @@
 class MyComponent extends React.Component {
   render() {
     return (
-      <p>Hello React!</p>
+      <div>
+        <h1>title</h1>
+        <p>Hello React!</p>
+      </div>
     )
   }
 }
