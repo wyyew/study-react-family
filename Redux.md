@@ -85,7 +85,7 @@ Redux 把界面视为一种状态机，界面里的所有状态、数据都可�
 
 ### 概念二 reducer
 
-reducer是一个形式为(state, action) => state 的纯函数，描述了action如何把state转变成下一个state.
+reducer是一个形式为(state, action) => state 的纯函数，描述了action如何把当前state转变成下一个state.
 
 ```
 function counter(state = 0, action) {
