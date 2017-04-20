@@ -295,9 +295,9 @@ export default combineReducers({
 
 参数
 
-- actionCreators (Function or Object): 一个 action creator，或者键值是 action creators 的对象。
+1. actionCreators (Function or Object): 一个 action creator，或者键值是 action creators 的对象。
 
-- dispatch (Function): 一个 dispatch 函数，由 Store 实例提供。
+2. dispatch (Function): 一个 dispatch 函数，由 Store 实例提供。
 
 返回值
 
