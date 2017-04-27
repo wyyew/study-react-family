@@ -187,7 +187,7 @@ class Counter extends Component {
 
 ### connect原理
 
-connect 是一个嵌套函数。运行connect()后，会生成一个高阶组件。该高阶组件接受一个组件作为参数再次运行，会生成一个新组件。
+connect 是一个嵌套函数。运行connect()后，会生成一个高阶组件。该高阶函数接受一个组件作为参数再次运行，会生成一个新组件。
 
 高阶组件新生成的组件叫connect组件。connect组件从context中获取了来自Provider的store，然后从store中获取state和dispatch，最后将state和经过dispatch加工的action创建函数连接到组件上，并在state变化时重新渲染组件。
 
