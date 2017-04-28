@@ -3,7 +3,10 @@
 1. Redux DevTools
 
 ```
-const store = createStore(counter, componse(
+import { compose, applyMiddleware } from 'redux'
+...
+
+const store = createStore(counter, compose(
   applyMiddleware(thiunk),
   window.devToolsExtension ? window.devToolsExtension() : f => f
 ));
