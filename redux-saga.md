@@ -152,17 +152,12 @@ store.runSaga(rootSaga)
 
     - 如果参数是一个数组，会针对数组所有项，匹配与 action.type 相等的 action（例如，take([INCREMENT, DECREMENT]) 会匹配 INCREMENT 或 DECREMENT 类型的 action）。
 
-   5. delay（延迟）
+   5. delay（延迟）delay(ms, [val]) 
    
    #### 作用
    
    可以直接使用 delay 来替代 setTimeout 这种会造成回调和嵌套的不优雅的方法。
    
-   ```
-   
-   delay(ms, [val])   
-   
-   ```
    #### 参数
    
    ms： 在ms毫秒之后执行.
