@@ -10,6 +10,11 @@
 
 5. 外部 API
 
+### API页面
+
+- [En](https://redux-saga.js.org/docs/api/index.html#delayms-val)
+
+- [cn](http://leonshi.com/redux-saga-in-chinese/docs/api/index.html#saga-helpers)
 
 > Redux-saga是Redux的一个中间件，主要集中处理react架构中的异步处理工作，被定义为generator(ES6)的形式，采用监听的形式进行工作
 
