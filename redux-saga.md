@@ -159,7 +159,8 @@ store.runSaga(rootSaga)
    可以直接使用 delay 来替代 setTimeout 这种会造成回调和嵌套的不优雅的方法。
    
    ```
-   delay(ms, [val])
+   
+   delay(ms, [val])   
    
    ```
    #### 参数
