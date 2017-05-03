@@ -2,7 +2,7 @@
 
 1. Middleware API
 
-2.Effect 创建器
+2. Effect 创建器
 
 3. Effect 组合器
 
@@ -14,7 +14,6 @@
 > Redux-saga是Redux的一个中间件，主要集中处理react架构中的异步处理工作，被定义为generator(ES6)的形式，采用监听的形式进行工作
 
 ### Middleware API
-
 
 1. createSagaMiddleware(...sagas)
 
@@ -44,7 +43,7 @@
     
   #### 返回值
   
-    这个方法返回一个 Task 描述对象
+   这个方法返回一个 Task 描述对象
     
 ```
 ...
