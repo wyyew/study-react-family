@@ -156,11 +156,12 @@ store.runSaga(rootSaga)
    
    #### 作用
    
-   可以直接使用 delay 来替代 setTimeout 这种会造成回调和嵌套的不优雅的方法。
+     可以直接使用 delay 来替代 setTimeout 这种会造成回调和嵌套的不优雅的方法。
    
-   #### 参数
+   
+   #### 参数
    
-   ms： 在ms毫秒之后执行.
+     ms： 在ms毫秒之后执行.
    
    #### 返回一个Promise
    
