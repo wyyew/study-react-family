@@ -40,8 +40,8 @@
     - saga: Function: 一个 Generator 函数
     
     - args: Array: 提供给 saga 的参数 (除了 Store 的 getState 方法)
-    
-  #### 返回值
+  
+  #### 返回
   
    这个方法返回一个 Task 描述对象
     
@@ -156,14 +156,15 @@ store.runSaga(rootSaga)
    
    #### 作用
    
-      可以直接使用 delay 来替代 setTimeout 这种会造成回调和嵌套的不优雅的方法。
+   可以直接使用 delay 来替代 setTimeout 这种会造成回调和嵌套的不优雅的方法。
    
    ```
    delay(ms, [val])
    
    ```
-   
-   在ms毫秒之后执行.
+   #### 参数
+   
+   ms： 在ms毫秒之后执行.
    
    #### 返回一个Promise
    
@@ -171,20 +172,10 @@ store.runSaga(rootSaga)
    setTimeout(_ => dispatch({ type: 'HIDE_ERROR' }), 2000);
    
    yield delay(2000);
-	  	yield put({ type: 'HIDE_ERROR' });
+	yield put({ type: 'HIDE_ERROR' });
    ```
-
-   6. race（只处理最先完成的任务）
    
-   #### 作用
-  
-   创建一条 Effect 描述信息，指示 middleware 在多个 Effect 之间执行一个 race（类似 Promise.race([...]) 的行为）。
-   
-   #### 参数
-  
-   effects: Object - 一个 {label: effect, ...} 形式的字典对象
-   
-   7. select(获取 Store state 上的数据)
+   6. select(获取 Store state 上的数据)
    
    #### 作用
    
@@ -199,6 +190,18 @@ store.runSaga(rootSaga)
    #### 注意
 
    如果 select 调用时参数为空（即 yield select()），那 effect 会取得整个的 state（和调用 getState() 的结果一样）。
+   
+### Effect 组合器
+
+   1. race（只处理最先完成的任务）
+   
+   #### 作用
+  
+   创建一条 Effect 描述信息，指示 middleware 在多个 Effect 之间执行一个 race（类似 Promise.race([...]) 的行为）。
+   
+   #### 参数
+  
+   effects: Object - 一个 {label: effect, ...} 形式的字典对象
    
    #### 重要提醒
   
