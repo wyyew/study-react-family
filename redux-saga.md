@@ -58,12 +58,7 @@ import trunk from 'redux-thunk'
 export default function configureStore() {
   const sagaMiddleware = createSagaMiddleware()
   return {
-    ...createStore(rootReducer,
-      compose(
-        applyMiddleware(sagaMiddleware, createLogger, trunk),
-        window.devToolsExtension ? window.devToolsExtension() : f => f
-      )
-    ),
+    ...createStore(rootReducer,  applyMiddleware(sagaMiddleware, createLogger, trunk)),
     runSaga: sagaMiddleware.run
   }
 } 
