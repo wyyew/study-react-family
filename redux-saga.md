@@ -52,24 +52,12 @@
     
 ```
 ...
-import createSagaMiddleware from 'redux-saga';
-import trunk from 'redux-thunk'
-
-export default function configureStore() {
-  const sagaMiddleware = createSagaMiddleware()
-  return {
-    ...createStore(rootReducer,  applyMiddleware(sagaMiddleware, createLogger, trunk)),
-    runSaga: sagaMiddleware.run
-  }
-} 
-
-....
-
-import rootSaga from './sagas'
-
-const store = configureStore();
-const states = store.getState();
-store.runSaga(rootSaga)
+const sagaMiddleware = createSagaMiddleware()
+const store = createStore(
+  rootReducer,
+  applyMiddleware(sagaMiddleware)
+)
+sagaMiddleware.run(rootSaga)
 ....
 ```
 
