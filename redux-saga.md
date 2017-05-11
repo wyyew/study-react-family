@@ -16,7 +16,7 @@
 
 - [cn](http://leonshi.com/redux-saga-in-chinese/docs/api/index.html#saga-helpers)
 
-> Redux-saga是Redux的一个中间件，主要集中处理react架构中的异步处理工作，被定义为generator(ES6)的形式，采用监听的形式进行工作
+> Redux-saga是Redux的一个中间件，主要集中处理react架构中的异步处理工作，被定义为generator(ES6)的形式，采用监听 action 来执行有副作用的 task，以保持 action 的简洁性.
 
 ### Middleware API
 
@@ -63,6 +63,10 @@ sagaMiddleware.run(rootSaga)
 
 ### Effect 创建器
 
+Effect 是一个 javascript 对象，里面包含描述副作用的信息，可以通过 yield 传达给 sagaMiddleware 执行。
+
+> 在 redux-saga 世界里，所有的 Effect 都必须被 yield 才会执行,并且原则上来说，所有的 yield 后面也只能跟Effect.
+
 > 注意
 
 以下每个函数都会返回一个 plain Javascript object (纯文本 Javascript 对象) 并且不会执行任何其它的操作。 执行是由 middleware 在上述迭代过程中进行的。 middleware 检查每个 Effect 的信息，并进行相应的操作。
@@ -75,6 +79,8 @@ sagaMiddleware.run(rootSaga)
   #### 作用
    
       创建一条 Effect 描述信息，指示 middleware 发起一个 action 到 Store。
+      
+      > 作用和 redux 中的 dispatch 相同。
 
   #### 参数
    
@@ -165,6 +171,8 @@ sagaMiddleware.run(rootSaga)
    #### 作用
    
    创建一条 Effect 描述信息，指示 middleware 调用提供的选择器获取 Store state 上的数据（例如，返回 selector(getState(), ...args) 的结果）。
+   
+   > 作用和 redux thunk 中的 getState 相同。
    
    #### 参数
 
