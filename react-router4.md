@@ -20,7 +20,7 @@ react-router 和react-router-dom，他们两个只要引用一个就行了，不
 
 ## 组件
 
-<BrowserRouter>
+### BrowserRouter
 
 一个使用了 HTML5 history API 的高阶路由组件，保证你的 UI 界面和 URL 保持同步。此组件拥有以下属性：
 
@@ -48,6 +48,135 @@ const getConfirmation = (message, callback) => {
 
 <BrowserRouter getUserConfirmation={getConfirmation('Are you sure?', yourCallBack)} />
 ```
+- forceRefresh: bool
+
+作用：当浏览器不支持 html5 的 history API 时强制刷新页面。
+
+使用场景：同上。
+
+```
+const supportsHistory = 'pushState' in window.history
+<BrowserRouter forceRefresh={!supportsHistory} />
+```
+
+- keyLength: number
+
+作用：设置它里面路由的 location.key 的长度。默认是6。（key的作用：点击同一个链接时，每次该路由下的 location.key都会改变，可以通过 key 的变化来刷新页面。）
+
+使用场景：按需设置。
+
+```
+<BrowserRouter keyLength={12} />
+```
+
+- children: node
+
+作用：渲染唯一子元素。
+
+使用场景：作为一个 Reac t组件，天生自带 children 属性。
+
+
+### Route>
+
+<Route> 也许是 RR4 中最重要的组件了，它最基本的职责就是当页面的访问地址与 Route 上的 path 匹配时，就渲染出对应的 UI 界面。
+
+<Route> 自带三个 render method 和三个 props 。
+
+render methods 分别是：
+
+- <Route component>
+  
+> component
+
+>> 只有当访问地址和路由匹配时，一个 React component 才会被渲染，此时此组件接受 route props (match, location, history)。
+当使用 component 时，router 将使用 React.createElement 根据给定的 component 创建一个新的 React 元素。这意味着如果你使用内联函数（inline function）传值给 component将会产生不必要的重复装载。对于内联渲染（inline rendering）, 建议使用 renderprop。
+
+```
+<Route path="/user/:username" component={User} />
+const User = ({ match }) => {
+  return <h1>Hello {match.params.username}!</h1>
+}
+```
+  
+- <Route render>
+  
+  > render: func
+
+>>此方法适用于内联渲染，而且不会产生上文说的重复装载问题。
+
+```
+// 内联渲染
+<Route path="/home" render={() => <h1>Home</h1} />
+
+// 包装 组合
+const FadingRoute = ({ component: Component, ...rest }) => (
+  <Route {...rest} render={props => (
+    <FadeIn>
+      <Component {...props} />
+    </FaseIn>
+  )} />
+)
+
+<FadingRoute path="/cool" component={Something} />
+```
+
+- <Route children>
+  
+  > children: func
+  
+>> 有时候你可能只想知道访问地址是否被匹配，然后改变下别的东西，而不仅仅是对应的页面。
+
+```
+<ul>
+  <ListItemLink to="/somewhere" />
+  <ListItemLink to="/somewhere-ele" />
+</ul>
+
+const ListItemLink = ({ to, ...rest }) => (
+  <Route path={to} children={({ match }) => (
+    <li className={match ? 'active' : ''}>
+      <Link to={to} {...rest} />
+    </li>
+  )}
+)
+```
+
+- path: string
+
+任何可以被 path-to-regexp解析的有效 URL 路径
+
+```
+<Route path="/users/:id" component={User} />
+```
+
+如果不给path，那么路由将总是匹配。
+
+- exact: bool
+
+如果为 true，path 为 '/one' 的路由将不能匹配 '/one/two'，反之，亦然。
+
+- strict: bool
+
+对路径末尾斜杠的匹配。如果为 true。path 为 '/one/' 将不能匹配 '/one' 但可以匹配 '/one/two'。
+
+如果要确保路由没有末尾斜杠，那么 strict 和 exact 都必须同时为 true
+
+
+每种 render method 都有不同的应用场景，同一个<Route> 应该只使用一种 render method ，大部分情况下你将使用 component .
+  
+props 分别是：
+
+- match
+
+- location
+
+- history
+
+所有的 render method 无一例外都将被传入这些 props。
+
+
+
+
 
 
 ```
