@@ -76,7 +76,7 @@ const supportsHistory = 'pushState' in window.history
 使用场景：作为一个 Reac t组件，天生自带 children 属性。
 
 
-### Route>
+### Route
 
 <Route> 也许是 RR4 中最重要的组件了，它最基本的职责就是当页面的访问地址与 Route 上的 path 匹配时，就渲染出对应的 UI 界面。
 
@@ -84,11 +84,11 @@ const supportsHistory = 'pushState' in window.history
 
 render methods 分别是：
 
-- <Route component>
+- Route component
   
-> component
+ > component
 
->> 只有当访问地址和路由匹配时，一个 React component 才会被渲染，此时此组件接受 route props (match, location, history)。
+ >> 只有当访问地址和路由匹配时，一个 React component 才会被渲染，此时此组件接受 route props (match, location, history)。
 当使用 component 时，router 将使用 React.createElement 根据给定的 component 创建一个新的 React 元素。这意味着如果你使用内联函数（inline function）传值给 component将会产生不必要的重复装载。对于内联渲染（inline rendering）, 建议使用 renderprop。
 
 ```
@@ -98,11 +98,11 @@ const User = ({ match }) => {
 }
 ```
   
-- <Route render>
+- Route render
   
   > render: func
 
->>此方法适用于内联渲染，而且不会产生上文说的重复装载问题。
+ >> 此方法适用于内联渲染，而且不会产生上文说的重复装载问题。
 
 ```
 // 内联渲染
@@ -120,11 +120,11 @@ const FadingRoute = ({ component: Component, ...rest }) => (
 <FadingRoute path="/cool" component={Something} />
 ```
 
-- <Route children>
+- Route children
   
   > children: func
   
->> 有时候你可能只想知道访问地址是否被匹配，然后改变下别的东西，而不仅仅是对应的页面。
+  >> 有时候你可能只想知道访问地址是否被匹配，然后改变下别的东西，而不仅仅是对应的页面。
 
 ```
 <ul>
@@ -175,9 +175,110 @@ props 分别是：
 所有的 render method 无一例外都将被传入这些 props。
 
 
+### Link
+
+为你的应用提供声明式，无障碍导航。
+
+- to: string
+
+作用：跳转到指定路径
+使用场景：如果只是单纯的跳转就直接用字符串形式的路径。
+
+```
+<Link to="/courses" />
+```
+
+- to: object
+
+作用：携带参数跳转到指定路径
+作用场景：比如你点击的这个链接将要跳转的页面需要展示此链接对应的内容，又比如这是个支付跳转，需要把商品的价格等信息传递过去。
+
+```
+<Link to={{
+  pathname: '/course',
+  search: '?sort=name',
+  state: { price: 18 }
+}} />
+```
+
+- replace: bool
+
+为 true 时，点击链接后将使用新地址替换掉上一次访问的地址，什么意思呢，比如：你依次访问 '/one' '/two' '/three' ’/four' 这四个地址，如果回退，将依次回退至 '/three' '/two' '/one' ，这符合我们的预期，假如我们把链接 '/three' 中的 replace 设为 true 时。依次点击 one two three four 然后再回退会发生什么呢？会依次退至 '/three' '/one'！
 
 
+#### NavLink
 
+> 这是 <Link> 的特殊版，顾名思义这就是为页面导航准备的。因为导航需要有 “激活状态”。
+
+- activeClassName: string
+
+导航选中激活时候应用的样式名，默认样式名为 active
+
+```
+<NavLink
+  to="/about"
+  activeClassName="selected"
+>MyBlog</NavLink>
+activeStyle: object
+```
+如果不想使用样式名就直接写style
+
+```
+<NavLink
+  to="/about"
+  activeStyle={{ color: 'green', fontWeight: 'bold' }}
+>MyBlog</NavLink>
+```
+- exact: bool
+
+若为 true，只有当访问地址严格匹配时激活样式才会应用
+
+
+- strict: bool
+
+若为 true，只有当访问地址后缀斜杠严格匹配（有或无）时激活样式才会应用
+
+
+- isActive: func
+
+决定导航是否激活，或者在导航激活时候做点别的事情。不管怎样，它不能决定对应页面是否可以渲染。
+
+### Switch
+
+只渲染出第一个与当前访问地址匹配的 <Route> 或 <Redirect>。
+
+思考如下代码，如果你访问 /about，那么组件 About User Nomatch 都将被渲染出来，因为他们对应的路由与访问的地址 /about 匹配。这显然不是我们想要的，我们只想渲染出第一个匹配的路由就可以了，于是 <Switch> 应运而生！
+
+```
+<Route path="/about" component={About}/>
+<Route path="/:user" component={User}/>
+<Route component={NoMatch}/>
+```
+
+也许你会问，为什么 RR4 机制里不默认匹配第一个符合要求的呢，答：这种设计允许我们将多个 <Route> 组合到应用程序中，例如侧边栏（sidebars），面包屑 等等。
+
+另外，<Switch> 对于转场动画也非常适用，因为被渲染的路由和前一个被渲染的路由处于同一个节点位置！
+  
+  ```
+  <Fade>
+  <Switch>
+    {/* 用了Switch 这里每次只匹配一个路由，所有只有一个节点。 */}
+    <Route/>
+    <Route/>
+  </Switch>
+</Fade>
+
+<Fade>
+  <Route/>
+  <Route/>
+  {/* 不用 Switch 这里可能就会匹配多个路由了，即便匹配不到，也会返回一个null，使动画计算增加了一些麻烦。 */}
+</Fade>
+```
+- children: node
+
+Switch 下的子节点只能是 Route 或 Redirect 元素。只有与当前访问地址匹配的第一个子节点才会被渲染。Route 元素用它们的 path 属性匹配，Redirect 元素使用它们的 from 属性匹配。如果没有对应的 path 或 from，那么它们将匹配任何当前访问地址。
+  
+  
 
 ```
 import React from 'react'
