@@ -1,5 +1,55 @@
 ## 前导
 
+> 它遵循react的设计理念，即万物皆组件。所以 RR4 只是一堆 提供了导航功能的组件（还有若干对象和方法），具有声明式（引入即用），可组合性的特点.
+
+RR4 本次采用单代码仓库模型架构（monorepo），这意味者这个仓库里面有若干相互独立的包，分别是：
+
+- react-router React Router 核心
+
+- react-router-dom 用于 DOM 绑定的 React Router
+
+- react-router-native 用于 React Native 的 React Router
+
+- react-router-redux React Router 和 Redux 的集成
+
+- react-router-config 静态路由配置的小助手
+
+react-router 和react-router-dom，他们两个只要引用一个就行了，不同之处就是后者比前者多出了 <Link> <BrowserRouter> 这样的 DOM 类组件。
+  
+如果搭配 redux ，你还需要使用 react-router-redux。
+
+## 组件
+
+<BrowserRouter>
+
+一个使用了 HTML5 history API 的高阶路由组件，保证你的 UI 界面和 URL 保持同步。此组件拥有以下属性：
+
+- basename: string
+
+作用：为所有位置添加一个基准URL
+
+使用场景：假如你需要把页面部署到服务器的二级目录，你可以使用 basename 设置到此目录。
+
+```
+<BrowserRouter basename="/minooo" />
+<Link to="/react" /> // 最终渲染为 <a href="/minooo/react">
+```
+- getUserConfirmation: func
+
+作用：导航到此页面前执行的函数，默认使用 window.confirm
+
+使用场景：当需要用户进入页面前执行什么操作时可用，不过一般用到的不多。
+
+```
+const getConfirmation = (message, callback) => {
+  const allowTransition = window.confirm(message)
+  callback(allowTransition)
+}
+
+<BrowserRouter getUserConfirmation={getConfirmation('Are you sure?', yourCallBack)} />
+```
+
+
 ```
 import React from 'react'
 import {BrowserRouter as Router,Route,Link} from 'react-router-dom'
