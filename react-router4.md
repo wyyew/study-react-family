@@ -278,7 +278,176 @@ activeStyle: object
 
 Switch 下的子节点只能是 Route 或 Redirect 元素。只有与当前访问地址匹配的第一个子节点才会被渲染。Route 元素用它们的 path 属性匹配，Redirect 元素使用它们的 from 属性匹配。如果没有对应的 path 或 from，那么它们将匹配任何当前访问地址。
   
+### Redirect
+
+Redirect 渲染时将导航到一个新地址，这个新地址覆盖在访问历史信息里面的本该访问的那个地址。
+
+- to: string
+
+  重定向的 URL 字符串
+
+- to: object
+
+  重定向的 location 对象
+
+- push: bool
+ 
+  若为真，重定向操作将会把新地址加入到访问历史记录里面，并且无法回退到前面的页面。
+
+- from: string
   
+  需要匹配的将要被重定向路径。
+ 
+### Prompt
+
+当用户离开当前页面前做出一些提示。
+
+- message: string
+
+  当用户离开当前页面时，设置的提示信息。
+
+```
+<Prompt message="确定要离开？" />
+
+```
+
+- message: func
+  
+  当用户离开当前页面时，设置的回掉函数
+
+```
+<Prompt message={location => (
+  `Are you sue you want to go to ${location.pathname}?` 
+)} />
+
+```
+### when: bool
+
+通过设置一定条件要决定是否启用 Prompt
+
+## 对象和方法
+
+### history
+
+histoty 是 RR4 的两大重要依赖之一（另一个当然是 React 了），在不同的 JavaScript 环境中， history 以多种能够行驶实现了对会话（session）历史的管理。
+
+history 对象通常具有以下属性和方法：
+
+* length: number 浏览历史堆栈中的条目数
+
+* action: string 路由跳转到当前页面执行的动作，分为 PUSH, REPLACE, POP
+
+* location: object 当前访问地址信息组成的对象，具有如下属性：
+
+  1. pathname: string URL路径
+
+  2. search: string URL中的查询字符串
+
+  3. hash: string URL的 hash 片段
+
+  4. state: string 例如执行 push(path, state) 操作时，location 的 state 将被提供到堆栈信息里，state 只有在 browser 和 memory history 有效。
+
+* push(path, [state]) 在历史堆栈信息里加入一个新条目。
+
+* replace(path, [state]) 在历史堆栈信息里替换掉当前的条目
+
+* go(n) 将 history 堆栈中的指针向前移动 n。
+
+* goBack() 等同于 go(-1)
+
+* goForward 等同于 go(1)
+
+* block(prompt) 阻止跳转
+
+history 对象是可变的，因为建议从 Route 的 prop 里来获取 location，而不是从 history.location 直接获取。这样可以保证 React 在生命周期中的钩子函数正常执行，例如以下代码：
+
+```
+class Comp extends React.Component {
+  componentWillReceiveProps(nextProps) {
+    // locationChanged
+    const locationChanged = nextProps.location !== this.props.location
+
+    // 错误方式，locationChanged 永远为 false，因为history 是可变的
+    const locationChanged = nextProps.history.location !== this.props.history.location
+  }
+}
+```
+
+### location
+
+location 是指你当前的位置，将要去的位置，或是之前所在的位置
+
+```
+{
+  key: 'sdfad1'
+  pathname: '/about',
+  search: '?name=minooo'
+  hash: '#sdfas',
+  state: {
+    price: 123
+  }
+}
+```
+在以下情境中可以获取 location 对象
+
+* 在 Route component 中，以 this.props.location 获取
+
+* 在 Route render 中，以 ({location}) => () 方式获取
+
+* 在 Route children 中，以 ({location}) => () 方式获取
+
+* 在 withRouter 中，以 this.props.location 的方式获取
+
+location 对象不会发生改变，因此可以在生命周期的回调函数中使用 location 对象来查看当前页面的访问地址是否发生改变。这种技巧在获取远程数据以及使用动画时非常有用
+
+```
+componentWillReceiveProps(nextProps) {
+  if (nextProps.location !== this.props.location) {
+    // 已经跳转了！
+  }
+}
+```
+
+可以在不同情境中使用 location：
+
+
+* \<Link to={location}/>
+
+* \<NaviveLink to={location} />
+
+* \<Redirect to={location />
+
+* history.push(location)
+
+* history.replace(location)
+
+### match
+
+match 对象包含了 \<Route path\> 如何与 URL 匹配的信息，具有以下属性：
+
+* params: object 路径参数，通过解析 URL 中的动态部分获得键值对
+
+* isExact: bool 为 true 时，整个 URL 都需要匹配
+
+* path: string 用来匹配的路径模式，用于创建嵌套的 <Route>
+
+* url: string URL 匹配的部分，用于嵌套的 <Link>
+
+在以下情境中可以获取 match 对象
+
+* 在 Route component 中，以 this.props.match获取
+
+* 在 Route render 中，以 ({match}) => () 方式获取
+
+* 在 Route children 中，以 ({match}) => () 方式获取
+
+* 在 withRouter 中，以 this.props.match的方式获取
+
+* matchPath 的返回值
+
+当一个 Route 没有 path 时，它会匹配一切路径。
+
+********
 
 ```
 import React from 'react'
