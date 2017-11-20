@@ -1,0 +1,101 @@
+## 环境
+
+mongodb 3.4 
+window10
+
+## MongoDB常用命令
+
+```
+
+[root@snails ~]# ps -ef|grep mongod
+[root@snails ~]# mongo --host=127.0.0.1 --port=27017
+MongoDB shell version: 3.2.7
+connecting to: 127.0.0.1:27017/test
+
+> show dbs  #显示数据库列表 
+> show collections  #显示当前数据库中的集合（类似关系数据库中的表）
+> show users  #显示用户
+> use <db name>  #切换当前数据库，如果数据库不存在则创建数据库。 
+> db.help()  #显示数据库操作命令，里面有很多的命令 
+> db.foo.help()  #显示集合操作命令，同样有很多的命令，foo指的是当前数据库下，一个叫foo的集合，并非真正意义上的命令 
+> db.foo.find()  #对于当前数据库中的foo集合进行数据查找（由于没有条件，会列出所有数据） 
+> db.foo.find( { a : 1 } )  #对于当前数据库中的foo集合进行查找，条件是数据中有一个属性叫a，且a的值为1
+
+```
+>> MongoDB没有创建数据库的命令，但有类似的命令。 如：如果你想创建一个“myTest”的数据库，先运行use 
+myTest命令，之后就做一些操作（如：db.createCollection(‘user’)）,这样就可以创建一个名叫“myTest”的数据库。
+
+##其他命令
+
+```
+> db.dropDatabase()  #删除当前使用数据库
+> db.cloneDatabase("127.0.0.1")   #将指定机器上的数据库的数据克隆到当前数据库
+> db.copyDatabase("mydb", "temp", "127.0.0.1")  #将本机的mydb的数据复制到temp数据库中
+> db.repairDatabase()  #修复当前数据库
+> db.getName()  #查看当前使用的数据库，也可以直接用db
+> db.stats()  #显示当前db状态
+> db.version()  #当前db版本
+> db.getMongo()  ＃查看当前db的链接机器地址
+> db.serverStatus()  #查看数据库服务器的状态
+
+```
+
+需求
+
+MongoDB安装完成后，默认是不需要输入用户名密码即可登录的，但是往往数据库方面我们会出于安全性的考虑而设置用户名密码，本篇文章主要介绍了MongoDB添加管理员/普通用户的方法。
+
+用户权限设置
+
+网上总结了四条
+
+MongoDB是没有默认管理员账号，所以要先添加管理员账号，再开启权限认证。
+切换到admin数据库，添加的账号才是管理员账号。
+用户只能在用户所在数据库登录，包括管理员账号。
+管理员可以管理所有数据库，但是不能直接管理其他数据库，要先在admin数据库认证后才可以。
+创建管理员账号
+
+在admin数据库中，添加一个用户并赋予userAdminAnyDatabase角色。 
+例如，下面是在admin数据库中创建一个名为myUserAdmin用户。
+
+在window管理员下启动cmd，并且连接上mongodb， 
+连接命令：
+
+```
+D:\Program Files\MongoDB\Server\3.4\bin>mongo.exe
+```
+
+创建用户命令：
+
+```
+use admin
+db.createUser(
+  {
+    user: "myUserAdmin",
+    pwd: "abc123",
+    roles: [ { role: "userAdminAnyDatabase", db: "admin" } ]
+  }
+)
+#结果
+Successfully added user: {
+    "user" : "admin",
+    "roles" : [
+        {
+            "role" : "userAdminAnyDatabase",
+            "db" : "admin"
+        }
+    ]
+}
+
+```
+执行以下命令，看看结果
+
+```
+> show users
+> db.system.users.find()
+```
+
+开启权限验证
+
+window中： 
+D:\Program Files\MongoDB\Server\3.4\mongod.cfg 
+这个配置文件是我自己手动配置，关于mongodb配置，可以参考： link[http://blog.csdn.net/u013066244/article/details/53874216]
