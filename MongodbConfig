@@ -99,3 +99,4 @@ Successfully added user: {
 window中： 
 D:\Program Files\MongoDB\Server\3.4\mongod.cfg 
 这个配置文件是我自己手动配置，关于mongodb配置，可以参考： link[http://blog.csdn.net/u013066244/article/details/53874216]
+mongodb3.4的安装和配置[http://blog.csdn.net/u013066244/article/details/53838721]
