@@ -16,7 +16,15 @@
 
 - [cn](http://leonshi.com/redux-saga-in-chinese/docs/api/index.html#saga-helpers)
 
-> Redux-saga是Redux的一个中间件，主要集中处理react架构中的异步处理工作，被定义为generator(ES6)的形式，采用监听 action 来执行有副作用的 task，以保持 action 的简洁性.
+> Redux-saga是Redux的一个中间件，主要集中处理react架构中的异步处理工作，被定义为generator(ES6)的形式，采用监听 action 来执行有副作用的 task，以保持 action 的简洁性.(函数副作用 指当调用函数时，除了返回函数值之外，还对主调用函数产生附加的影响。例如修改全局变量（函数外的变量）或修改参数。函数副作用会给程序设计带来不必要的麻烦，给程序带来十分难以查找的错误，并且降低程序的可读性。严格的函数式语言要求函数必须无副作用。)
+函数的副作用相关的几个概念， Pure Function、 Impure Function、 Referential Transparent。
+JS中要想保证函数无副作用这项特性，只能依靠编程人员的习惯，即
+
+> 函数入口使用参数运算，而不修改它
+
+> 函数内不修改函数外的变量，如全局变量
+
+> 运算结果通过函数返回给外部（出口）
 
 ### Middleware API
 
