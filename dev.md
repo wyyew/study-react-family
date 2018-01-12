@@ -47,4 +47,6 @@ app.router(require('./router'));
 app.start('#root');
 ```
 
-1.const app = dva()
+_ const app = dva()
+
+ 这部分是用来做dva初始化的部分 先给大家看一下完整的接口
