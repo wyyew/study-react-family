@@ -18,14 +18,21 @@
 
 ### Demos
 
-[Count:](https://stackblitz.com/edit/dva-example-count) 简单计数器
-[User Dashboard:](https://github.com/dvajs/dva/tree/master/packages/dva-example-user-dashboard) 用户管理
-[HackerNews:](https://github.com/dvajs/dva-hackernews) ([Demo](https://dvajs.github.io/dva-hackernews/#/top?_k=743noh))，HackerNews Clone
-[antd-admin:](https://github.com/zuiidea/antd-admin) ([Demo](http://antd-admin.zuiidea.com/login?from=%2F))，基于 antd 和 dva 的后台管理应用
-[github-stars:](https://github.com/sorrycc/github-stars) ([Demo](http://sorrycc.github.io/github-stars/#/?_k=rmj86f))，Github Star 管理应用
-[react-native-dva-starter:](https://github.com/nihgwu/react-native-dva-starter) 集成了 dva 和 react-navigation 典型应用场景的 React Native 实例
-[dva-example-nextjs:](https://github.com/dvajs/dva/tree/master/packages/dva-example-nextjs) 和 next.js 整合使用
-[Account System:](https://github.com/yvanwangl/AccountSystem) 小型库存管理系统
+- [Count:](https://stackblitz.com/edit/dva-example-count) 简单计数器
+
+- [User Dashboard:](https://github.com/dvajs/dva/tree/master/packages/dva-example-user-dashboard) 用户管理
+
+- [HackerNews:](https://github.com/dvajs/dva-hackernews) ([Demo](https://dvajs.github.io/dva-hackernews/#/top?_k=743noh))，HackerNews Clone
+
+- [antd-admin:](https://github.com/zuiidea/antd-admin) ([Demo](http://antd-admin.zuiidea.com/login?from=%2F))，基于 antd 和 dva 的后台管理应用
+
+- [github-stars:](https://github.com/sorrycc/github-stars) ([Demo](http://sorrycc.github.io/github-stars/#/?_k=rmj86f))，Github Star 管理应用
+
+- [react-native-dva-starter:](https://github.com/nihgwu/react-native-dva-starter) 集成了 dva 和 react-navigation 典型应用场景的 React Native 实例
+
+- [dva-example-nextjs:](https://github.com/dvajs/dva/tree/master/packages/dva-example-nextjs) 和 next.js 整合使用
+
+- [Account System:](https://github.com/yvanwangl/AccountSystem) 小型库存管理系统
 
 ### 初始化环境配置
 
@@ -203,4 +210,83 @@ const app = dva({
 
 ```
 
-详见 [examples/count-undo]() 。
+**onEffect(fn)**
+
+封装 effect 执行。比如 [dva-loading](https://github.com/dvajs/dva/tree/master/packages/dva-loading) 基于此实现了自动处理 loading 状态。
+
+**onHmr(fn)**
+
+热替换相关，目前用于 [babel-plugin-dva-hmr](https://github.com/dvajs/babel-plugin-dva-hmr) 。
+
+**extraReducers**
+
+指定额外的 reducer，比如 [redux-form](https://github.com/erikras/redux-form) 需要指定额外的 form reducer：
+
+```
+
+import { reducer as formReducer } from 'redux-form'
+const app = dva({
+  extraReducers: {
+    form: formReducer,
+  },
+});
+
+```
+
+**extraEnhancers**
+
+指定额外的 [StoreEnhancer](https://github.com/reactjs/redux/blob/master/docs/Glossary.md#store-enhancer) ，比如结合 [redux-persist](https://github.com/rt2zz/redux-persist) 的使用：
+
+```
+
+import { persistStore, autoRehydrate } from 'redux-persist';
+const app = dva({
+  extraEnhancers: [autoRehydrate()],
+});
+persistStore(app._store);
+
+```
+
+**app.model(model)**
+
+这个是用来接收你发送的action的,model 是 dva 中最重要的概念。以下是典型的例子：
+
+```
+
+app.model({
+  namespace: 'todo',
+	state: [],
+  reducers: {
+    add(state, { payload: todo }) {
+      // 保存数据到 state
+      return [...state, todo];
+    },
+  },
+  effects: {
+    *save({ payload: todo }, { put, call }) {
+      // 调用 saveTodoToServer，成功后触发 `add` action 保存到 state
+      yield call(saveTodoToServer, todo);
+      yield put({ type: 'add', payload: todo });
+    },
+  },
+  subscriptions: {
+    setup({ history, dispatch }) {
+      // 监听 history 变化，当进入 `/` 时触发 `load` action
+      return history.listen(({ pathname }) => {
+        if (pathname === '/') {
+          dispatch({ type: 'load' });
+        }
+      });
+    },
+  },
+});
+
+```
+
+model 包含 5 个属性：
+
+- **namespace**
+
+> model 的命名空间，同时也是他在全局 state 上的属性，只能用字符串，不支持通过 . 的方式创建多层命名空间。
+
+
