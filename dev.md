@@ -285,6 +285,12 @@ app.model({
 
 model 包含 5 个属性：
 
+- reducers 处理数据
+
+- effects   接收数据
+
+- subscriptions 监听数据
+
 - **namespace**
 
 > model 的命名空间，同时也是他在全局 state 上的属性，只能用字符串，不支持通过 . 的方式创建多层命名空间。
@@ -377,3 +383,27 @@ type 类型有：
 
 4. **app.router**
 
+在这里面 进行你所有页面的初始化路由设置,这里有两种写法:
+
+写法1：
+
+```
+
+<Router>
+	<Route path="/" component={App}>
+		<Route path="about" component={About} />
+		<Route path="inbox" component={Inbox}>
+			<Route path="message/:id" component={Message} />
+		</Route>
+	</Route>
+</Router>
+
+写法2:
+
+```
+
+const CourseRoute = {
+	path:'course/:courseId',
+	
+}
+```
