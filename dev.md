@@ -212,6 +212,14 @@ const app = dva({
 
 **onEffect(fn)**
 
+- put  用来发起一条action
+
+- call 以异步的方式调用函数
+
+- select 从state中获取相关的数据
+
+- take 获取发送的数据
+
 封装 effect 执行。比如 [dva-loading](https://github.com/dvajs/dva/tree/master/packages/dva-loading) 基于此实现了自动处理 loading 状态。
 
 **onHmr(fn)**
