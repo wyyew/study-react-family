@@ -373,3 +373,7 @@ type 类型有：
 ```
 
 > **注意：** 如果要使用 app.unmodel()，subscription 必须返回 unlisten 方法，用于取消数据订阅。
+
+
+4. **app.router**
+
