@@ -1,5 +1,9 @@
 ## dva入门
 
+###dva 是什么
+
+> dva 是阿里前端架构师 sorrycc 带 team 研发的一套轻量级前端框架，其目的是尽量避免前端重复性劳动，简化开发流程。实际上也确实如此，一个简单的 CRUD 模块只需要1-2个小时即可完成前端作业。
+
 - 易学易用：仅有 6 个 api，对 redux 用户尤其友好
 
 - elm 概念：通过 reducers, effects 和 subscriptions 组织 model
