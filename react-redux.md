@@ -187,6 +187,51 @@ class Counter extends Component {
 
 ### connect原理
 
+> 高阶组件 -  给一个组件返回另外一个组件，另外的组件把原来的组件包裹一层这样我们就能在原有的一些组件的功能之上添加一些其他的功能
+
+- 属性代理
+
+```
+function WrapperHello(Comp){
+    class WrappComp extends React.Component{
+      render() {
+        return (
+          <div>
+             <p>这是HOC高阶组件特有的功能</p>
+             <Comp ...this.props></Comp>
+          </div>
+         )
+      }
+      return WrappComp   
+    }
+}
+
+@WrapperHello
+class hello extends React.Component{
+  render(){
+    return <h2>hello 高级人员！</h2>
+  }
+}
+
+```
+
+- 反向继承
+
+```
+function hello (){
+	console.log('hello 高级人员！')
+}
+function wrapperHello(fn) {
+	return function(){
+		console.log('befor say hello')
+		fn()
+		console.log('after say hello')
+	}
+}
+hello = wrapperHello(hello)
+hello();
+```
+
 connect 是一个嵌套函数。运行connect()后，会生成一个高阶组件。该高阶函数接受一个组件作为参数再次运行，会生成一个新组件。
 
 高阶组件新生成的组件叫connect组件。connect组件从context中获取了来自Provider的store，然后从store中获取state和dispatch，最后将state和经过dispatch加工的action创建函数连接到组件上，并在state变化时重新渲染组件。
