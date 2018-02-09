@@ -189,7 +189,10 @@ class Counter extends Component {
 
 > 高阶组件 -  给一个组件返回另外一个组件，另外的组件把原来的组件包裹一层这样我们就能在原有的一些组件的功能之上添加一些其他的功能
 
-- 属性代理
+>>> 主要作用就是组件的复用，逻辑的的抽象以及修改渲染的节省时间
+
+
+- 属性代理 我们可以在Comp上加任意的属性，也可以在Comp的上面和下面添加任意的元素P
 
 ```
 function WrapperHello(Comp){
@@ -215,7 +218,29 @@ class hello extends React.Component{
 
 ```
 
-- 反向继承
+- 反向继承  不包裹comp,而是继承它并且改变它的生命周期
+
+```
+function WrapperHello(Comp){
+    class WrappComp extends Comp{
+    	componentDidMount(){
+	   console.log('高阶组件新增的生命周期！')
+	}
+      render() {
+        return <Comp ...this.props></Comp>
+      }
+      return WrappComp   
+    }
+}
+
+@WrapperHello
+class hello extends React.Component{
+  render(){
+    return <h2>hello 高级人员！</h2>
+  }
+}
+
+```
 
 ```
 function hello (){
